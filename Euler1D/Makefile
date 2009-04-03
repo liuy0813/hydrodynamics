@@ -1,4 +1,13 @@
-all:
+PROGRAM  = Euler1D
+SOURCES  = params.f90        \
+	   Euler1Dlibs.f90   \
+	   Euler1D.f90       \
+           tictoc.f90
+COMPILER =gfortran
+FLAGS    =-O3 -Wall
+PGPLOT   =-lX11 -lpgplot
+
+$(PROGRAM):
 	@echo 'Compiling and linking...'	
-	@gfortran params.f90 Euler1Dlibs.f90 Euler1D.f90 tictoc.f90 -o Euler1D $(PGPLOT) -O3 -Wall
+	$(COMPILER) $(SOURCES) -o $(PROGRAM) $(FLAGS) $(PGPLOT)
 	@echo 'Done'
