@@ -41,13 +41,13 @@ The code implements the following algorithms to solve the Euler equations:
 
   * Finite-difference methods
     # Lax-Friedrichs method ([http://en.wikipedia.org/wiki/Lax%E2%80%93Friedrichs_method Wikipedia])
-    # MacCormack method ([http://en.wikipedia.org/wiki/MacCormack_method Wikipedia])
-    # MacCormack method with flux-corrected viscosity
+    # !MacCormack method ([http://en.wikipedia.org/wiki/MacCormack_method Wikipedia])
+    # !MacCormack method with flux-corrected viscosity
   * Finite-element methods
     # Simple Godunov upwind scheme
-    # HLL Riemann solver
+    # HLL Riemann solver (Harten, Lax, van Leer (1983))
     # HLLC Riemann solver
-    # HLLC with Linear Data Reconstruction
+    # HLLC with Linear Data Reconstruction (experimental)
 
 In addition, the HLL/HLLC solvers can use a variety of wavespeed estimation methods:
 
@@ -86,7 +86,7 @@ Installing and running the Euler1D code is simple:
    * <font color="red">Important:</font> create a directory named 'data' before running the code, or you will get an error.
    * Run the code by executing the binary: {{{./Euler1D}}}
 
-You should get a lot of feedback in the terminal, indicating progress and data dumps, as well as a rea-time plot in a separate PGPLOT window (you will also notice a small black window, possibly in the upper left corner: this is the PGPLOT server). The simulation data will be written to separate files in the data/ directory.
+You should get a lot of feedback in the terminal, indicating progress and data dumps, as well as a real-time plot in a separate PGPLOT window (you will also notice a small black window, possibly in the upper left corner: this is the PGPLOT server). The simulation data will be written to separate files in the data/ directory.
 
 The test run executed by default (as of r9) is Test 1 of Toro, which is very similar to Sod's Shock Tube: an initial discontinuity in both pressure and density which evolves into a right-moving shock wave and a left-moving rarefaction wave. Here's a sample of how it should look in the PGPLOT window:
 
