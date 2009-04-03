@@ -1,7 +1,7 @@
 !#################################!
 !#       PARAMETERS module       #!
 !# Defines simulation parameters #!
-!# for the EulerND program       #!
+!# for the Euler2D program       #!
 !#################################!
 
 module PARAMETERS
@@ -17,10 +17,16 @@ module PARAMETERS
   real*8, parameter  :: LY = 1.0        ! Grid physical length along Y
   real*8, parameter  :: CP = 0.9        ! Courant Parameter
   real*8, parameter  :: GAM = 1.4       ! Heat capacity ratios
+
   integer, parameter :: NOUT = 20       ! Number of outputs
   integer, parameter :: VERB = 0        ! Print verbose progress
-  integer, parameter :: PLOTRT = 0      ! Plot in real-time
-  integer, parameter :: COPY = 0        ! Make a hardcopy
+
+  ! PLOT sets the plotting options:
+  !  0: do not plot
+  !  1: plot each step to screen in real-time
+  !  2: plot each step in real-time, hardcopy final step
+  !  3: plot a hardcopy of each step
+  integer, parameter :: PLOT = 0
 
   ! SOLVER specifies the solution algorithm:
   !  1: HLL Riemann solver (Godunov upwind scheme)
@@ -37,7 +43,7 @@ module PARAMETERS
 
   ! ICS allows for built-in initial conditions
   !  0: Generic custom ICs, set in sub INITCOND
-  integer, parameter :: ICS = 0
+  integer, parameter :: ICS = 1
 
   ! BCS sets boundary conditions type
   !  1: Free-flow (transmission)
@@ -46,27 +52,24 @@ module PARAMETERS
   integer, parameter :: BCS = 1
 
   ! Final Integration time
-  ! Toro tests re-set their own NT; otherwise set here
-  real*8 :: NT = 0.1
+  real*8, parameter :: NT = 1.0
 
   ! Output Filename Template
   ! Iteration number will be placed between root and extension
-  ! DIR: data dump directory path (must be created beforehand)
+  ! DIR: data dump directory path (must exist beforehand)
   ! ROOT: root file name
   ! EXT: extension
   character(*), parameter :: DIR = './data/'
-  character(*), parameter :: ROOT = 'Riemann'
+  character(*), parameter :: ROOT = 'Explosion'
   character(*), parameter :: EXT = 'dat'
 
-  ! Data bundles
-  real*8 :: PARAMS(6)
+! --------------------------------
+! User-defined parameters END here
+! --------------------------------
 
   ! Bundle simulation parameters
-  PARAMS(1) = NX
-  PARAMS(2) = NY
-  PARAMS(3) = LX
-  PARAMS(4) = LY
-  PARAMS(5) = CP
-  PARAMS(6) = NT
+  real*8, parameter :: PARAMS(5) = (/LX,LY,CP,GAM,NT/)
+  integer, parameter :: FLAGS(7) = (/SOLVER,WSPD,ICS,BCS,NOUT,VERB,PLOT/)
+!  (/NX,NY,LX,LY,CP,GAM,NT/)
 
 END MODULE
