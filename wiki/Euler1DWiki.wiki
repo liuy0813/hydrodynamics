@@ -7,11 +7,11 @@
 
 = Introduction =
 
-Euler1D is a rudimentary 1-dimensional hydrodynamics code, originally written as part of a Seminar on Numerical Gas Dynamics that I took in August-December 2007, and expanded during the second part of such Seminar in early 2009.
+Euler1D is a rudimentary 1-dimensional hydrodynamics code, originally written as part of a Seminar on Numerical Gas Dynamics that I took in August-December 2007, and expanded during a follow-up seminar in early 2009.
 
-The code solves the 1D inviscid Euler equations in conservation form by means of a variety of first- and second-order methods. It was tested with a small battery of shock-inducing problems given by E.F. Toro ([http://www.amazon.com/Riemann-Solvers-Numerical-Methods-Dynamics/dp/3540616764/ref=sr_1_6?ie=UTF8&s=books&qid=1238732924&sr=1-6 ref]), which were inspired by _Sod's Shock Tube_.
+The code solves the 1D inviscid Euler equations in conservation form by means of a variety of first- and second-order methods. It was tested with a small battery of shock-inducing problems given by E.F. Toro ([http://www.amazon.com/Riemann-Solvers-Numerical-Methods-Dynamics/dp/3540616764/ref=sr_1_6?ie=UTF8&s=books&qid=1238732924&sr=1-6 book]), which are similar to _Sod's Shock Tube_.
 
-The code is far from being complete, lacking many features that would make it more portable (such as creating the data/ dir automatically hehe). However, it should still be able to simulate any decently concieved 1D problem.
+The code is far from being complete, lacking many features that would make it more portable (such as better handling of numerical divergence, creating the data/ dir automatically, etc). However, it should still be able to simulate any decently conceived 1D problem.
 
 = Details =
 
@@ -32,6 +32,8 @@ Here, <img src="http://img154.imageshack.us/img154/5681/latex2png2.png"> is the 
 is the total energy per unit volume (with <img src="http://img48.imageshack.us/img48/5681/latex2png2.png"> the internal thermal energy per unit volume). The system of equations is not closed and requires an equation of state to be solvable. In this case we study only ideal gasses, with an equation of state <img src=http://img237.imageshack.us/img237/5681/latex2png2.png>. The total energy then reduces to
 
 <img src="http://img141.imageshack.us/img141/5681/latex2png2.png">
+
+where <img src="http://img21.imageshack.us/img21/5681/latex2png2.png"> is the heat capacity ratio. All simulations on this page use 1.4 for this parameter.
 
 == Solution Algorithms ==
 
