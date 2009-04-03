@@ -1,63 +1,73 @@
 !############################!
-!#  Set Initial Conditions  #!
+!#        INITCOND          #!
+!#  Set initial conditions  #!
 !############################!
 
-! This subroutine receives the following arguments:
-!
-!   ICS: type of initial conditions:
-!        0: Custom initial conditions - specify here
-!        1: Spherical explosion
-!   NX, NY: number of points along X and Y directions
-!   LX, LY: grid physical size along X and Y directions
-!
-! and asigns and returns the following variables:
-!
-!   P: the 2-dimensional vector containing the
-!      initialized primitives
-!   NT: the simulation final time
+! IN arguments:
+!   ICS, int : type of initial conditions:
+!   NX, int : number of grid points along X
+!   NY, int : number of grid points along Y
+!   LX, double : grid physical size along X
+!   LY, double : grid physical size along Y
+! OUT arguments:
+!   P, double(NX,NY,4): containing the initialized primitives
+!   NT, double: the simulation final time
 
 !############################!
 
 subroutine INITCOND(ICS,NX,NY,LX,LY,P,NT)
 
+  implicit none
+
   integer, intent(in) :: ICS
   integer, intent(in) :: NX
   integer, intent(in) :: NY
-  integer, intent(in) :: LX
-  integer, intent(in) :: LY
-  real*8, intent(out) :: P(NX,NY,3)
+  real*8, intent(in) :: LX
+  real*8, intent(in) :: LY
+  real*8, intent(out) :: P(NX,NY,4)
   real*8, intent(out) :: NT
 
-  ! parameters for spherical explosion
-  real*8 :: radius = 0.1
-  real*8 :: xcenter = 0.5
-  real*8 :: ycenter = 0.5
-  real*8 :: prboost = 1000.0
+  integer :: i, j
+  real*8 :: x, y
 
-  real*8 :: dx = LX / NX
-  real*8 :: dy = LY / NY
+  ! spherical explosion
+  real*8 :: radius, xcen, ycen, dx, dy, d
+  radius = 0.1
+  xcen = 0.5
+  ycen = 0.5
+  dx = LX / NX
+  dy = LY / NY
 
-  if (ICS==0) then
-    ! Custom Initial Conditions
+  select case (ICS)
+
+  case (0)    ! Custom Initial Conditions
     ! The vectors of PRIMITIVES must be initialized here
-  else
-    ! Built-in test initial conditions
-    select case (ICS)
+    print*, 'No initial conditions loaded.'
+    stop
 
-    ! Spherical explosion
-    case (1):
-      do i=1,NX
-        do j=1,NY
-        
-        end do
+  case (1)   ! Spherical explosion
+
+    do i=1,NX
+      do j=1,NY
+        P(i,j,1) = 0.0      ! u
+        P(i,j,2) = 0.0      ! v
+        P(i,j,3) = 1.0      ! rho
+        x = i*dx
+        y = j*dy
+        d = sqrt((x-xcen)**2+(y-ycen)**2)
+        if (d <= radius) then
+          P(i,j,4) = 1000.0     ! P
+        else
+          P(i,j,4) = 1.0     ! P
+        end if
       end do
-    
+    end do
 
-    case default:
-      print*, 'No initial conditions loaded.'
-      stop
+  case default
+    print*, 'No initial conditions loaded.'
+    stop
 
-    end select
-  end if
+  end select
+
 
 end subroutine
