@@ -1,0 +1,103 @@
+#summary Description of the Euler1D project
+#labels Featured
+
+=== Contents ===
+
+<wiki:toc max_depth="2" />
+
+= Introduction =
+
+Euler1D is a rudimentary 1-dimensional hydrodynamics code, originally written as part of a Seminar on Numerical Gas Dynamics that I took in August-December 2007, and expanded during the second part of such Seminar in early 2009.
+
+The code solves the 1D inviscid Euler equations in conservation form by means of a variety of first- and second-order methods. It was tested with a small battery of shock-inducing problems given by E.F. Toro ([http://www.amazon.com/Riemann-Solvers-Numerical-Methods-Dynamics/dp/3540616764/ref=sr_1_6?ie=UTF8&s=books&qid=1238732924&sr=1-6 ref]), which were inspired by _Sod's Shock Tube_.
+
+The code is far from being complete, lacking many features that would make it more portable (such as creating the data/ dir automatically hehe). However, it should still be able to simulate any decently concieved 1D problem.
+
+= Details =
+
+== The Physics ==
+
+The 1D Euler equations for inviscid flows in vector conservation form are:
+
+<img src="http://img6.imageshack.us/img6/5681/latex2png2.png">
+
+where
+
+<img src="http://img6.imageshack.us/img6/3244/latex2png2h.png">
+
+Here, <img src="http://img154.imageshack.us/img154/5681/latex2png2.png"> is the flow velocity, <img src="http://img154.imageshack.us/img154/9494/latex2png2w.png"> is the fluid mass density, <img src="http://img518.imageshack.us/img518/5681/latex2png2.png"> is the gas pressure and 
+
+<img src="http://img11.imageshack.us/img11/5681/latex2png2.png">
+
+is the total energy per unit volume (with <img src="http://img48.imageshack.us/img48/5681/latex2png2.png"> the internal thermal energy per unit volume). The system of equations is not closed and requires an equation of state to be solvable. In this case we study only ideal gasses, with an equation of state <img src=http://img237.imageshack.us/img237/5681/latex2png2.png>. The total energy then reduces to
+
+<img src="http://img141.imageshack.us/img141/5681/latex2png2.png">
+
+== Solution Algorithms ==
+
+The code implements the following algorithms to solve the Euler equations:
+
+  * Finite-difference methods
+    # Lax-Friedrichs method ([http://en.wikipedia.org/wiki/Lax%E2%80%93Friedrichs_method Wikipedia])
+    # MacCormack method ([http://en.wikipedia.org/wiki/MacCormack_method Wikipedia])
+    # MacCormack method with flux-corrected viscosity
+  * Finite-element methods
+    # Simple Godunov upwind scheme
+    # HLL Riemann solver
+    # HLLC Riemann solver
+    # HLLC with Linear Data Reconstruction
+
+In addition, the HLL/HLLC solvers can use a variety of wavespeed estimation methods:
+
+  * Four simple direct wavespeed estimation method
+  * Three pressure-based wavespeed estimation method
+  * An adaptive non-iterative pressure-based method
+
+== Tests ==
+
+The code has been subject to 5 tests proposed by E.F. Toro. In all tests, the physical domain (of length 1.0) is initialized with different, but uniform, values on each side of a central discontinuity. The specific values for density, pressure and velocity are given in the following table.
+
+|| *Test* || <img src="http://img516.imageshack.us/img516/5681/latex2png2.png"> || <img src="http://img516.imageshack.us/img516/3649/latex2png2r.png"> || <img src="http://img520.imageshack.us/img520/5681/latex2png2.png"> || <img src="http://img520.imageshack.us/img520/5722/latex2png2e.png"> || <img src="http://img520.imageshack.us/img520/1525/latex2png2a.png"> || <img src="http://img128.imageshack.us/img128/5681/latex2png2.png"> ||
+|| 1 || 1.0 || 0.75 || 1.0   || 0.125 || 0.0 || 0.1  ||
+|| 2 || 1.0 || -2.0 || 0.4   || 1.0   || 2.0 || 0.4  ||
+|| 3 || 1.0 || 0.0  || 1000.0 || 1.0  || 0.0 || 0.01 ||
+|| 4 || 5.99924 || 19.5975 || 460.894 || 5.99242 || -6.19633 || 46.0950 ||
+|| 5 || 1.0 || -19.59745 || 1000.0 || 1.0 || -19.59745 || 0.01 ||
+
+<br>
+
+= Installation and Usage =
+
+== Requirements ==
+
+To compile and run the code you will need:
+  * A Fortran 90 compiler. I used the GCC Fortran 4.2.1 compiler (gfortran).
+  * The PGPLOT Graphics Subroutine Library, available [http://www.astro.caltech.edu/~tjp/pgplot/  here]. The tests were run with PGPLOT 5.2 installed.
+  * Alternatively, you may wish to comment out all the lines containg PGPLOT subroutine calls (they begin with PG) and the call to the PLOT subroutine (sorry for the lack of preprocessor directives to handle this), and plot the data manually. The code dumps the simulation data at regular intervals to the data/ directory, in a format suitable to be read and plotted by gnuplot (and I guess other programs).
+
+== Installing ==
+
+Installing and running the Euler1D code is simple:
+   * Download the source code from [http://code.google.com/p/hydrodynamics/source/browse/trunk/Euler1D/ here].
+   * Also, download the tictoc.f90 source from [http://code.google.com/p/hydrodynamics/source/browse/#svn/trunk/lib here]. Put this file in the same directory (it's a small library to time the execution of the code).
+   * Compile the code by running {{{make}}}. If everything went well, you should have an 'Euler1D' binary.
+   * <font color="red">Important:</font> create a directory named 'data' before running the code, or you will get an error.
+   * Run the code by executing the binary: {{{./Euler1D}}}
+
+You should get a lot of feedback in the terminal, indicating progress and data dumps, as well as a rea-time plot in a separate PGPLOT window (you will also notice a small black window, possibly in the upper left corner: this is the PGPLOT server). The simulation data will be written to separate files in the data/ directory.
+
+The test run executed by default (as of r9) is Test 1 of Toro, which is very similar to Sod's Shock Tube: an initial discontinuity in both pressure and density which evolves into a right-moving shock wave and a left-moving rarefaction wave. Here's a sample of how it should look in the PGPLOT window:
+
+<a href="http://img123.imageshack.us/img123/2838/screenyvt.jpg" target="_blank"><IMG src=http://img123.imageshack.us/img123/2838/screenyvt.th.jpg border="0"><a/>
+
+== Settings ==
+
+If you wish to change the settings of the code, or choose a different test, you must modify the *params.f90* source file, and recompile the code. This configuration file is heavily commented and should be self-explanatory. Amongst the things you can change are:
+
+   * The number of grid points and size of the grid.
+   * The Courant parameter of the simulation.
+   * The solver used to integrate the Euler equations.
+   * The wavespeed estimation method for HLL/HLLC solvers.
+   * The type of boundary conditions: transmission, reflection, periodic.
+   * The initial conditions. The code has 5 built-in tests (ICS=1 to 5).
+   * The destination and filename template for data dumps.
