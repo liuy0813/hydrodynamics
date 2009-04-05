@@ -17,8 +17,8 @@
 # they produced the same result.    #
 # The execution times were:         #
 #                                   #
-# Python code: 280.77s              #
-# Fortran90 code: 2.646s            #
+# Python code: 235.72s              #
+# Fortran90 code: 2.315s            #
 #                                   #
 # As seen, there is a monumental    #
 # 100X difference in performance,   #  
@@ -90,7 +90,7 @@ def initcond():
    # This is a standard test for hydro codes
    # Velocity = 0 everywhere
    # Density = 1.0 on left half, 0.125 on right half
-   # Pressure = 1.0 on left, 0.1 on right
+   # Pressure = 1.0 on left, 0.125 on right
   for X in range(NX):
     if (X<=NX/2):
       P[X][1] = 0.0
@@ -99,7 +99,7 @@ def initcond():
     else:
       P[X][1] = 0.0
       P[X][2] = 0.125
-      P[X][3] = 0.1
+      P[X][3] = 0.125
   getvars()
 
 #############################
@@ -165,8 +165,9 @@ def lax():
 #######################
 def boundary():
 
-  # Transmission boundary condition
-  for V in [1,2,3]:
+  # Reflection boundary condition
+  UP[0][2] = -1*UP[NX-2][2]
+  for V in [1,3]:
     UP[0][V] = UP[1][V]
     UP[NX-1][V] = U[NX-2][V]
 
