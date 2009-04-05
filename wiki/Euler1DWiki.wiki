@@ -51,9 +51,9 @@ The code implements the following algorithms to solve the Euler equations:
 
 In addition, the HLL/HLLC solvers can use a variety of wavespeed estimation methods:
 
-  * Four simple direct wavespeed estimation method
-  * Three pressure-based wavespeed estimation method
-  * An adaptive non-iterative pressure-based method
+  * Four simple _direct_ estimators
+  * Three _pressure-based_ estimators
+  * An adaptive non-iterative pressure-based estimator
 
 == Tests ==
 
