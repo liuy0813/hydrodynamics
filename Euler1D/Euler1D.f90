@@ -110,23 +110,28 @@ PROGRAM Euler1D
     ! (for points 2, NX-1)
     SELECT CASE (SOLVER)
 
-      ! Lax solver
       CASE (1)
+        ! Lax solver
         CALL LAX(NX,U,P,GAM,DT,DX,UP,F)
-      ! MacCormack solver
+
       CASE (2,3)
+       ! MacCormack solver
         CALL MAC(NX,U,P,GAM,ETA,DT,DX,SOLVER,UP,F)
-      ! Simple Godunov scheme
+
       CASE (4)
+        ! Simple Godunov scheme
         CALL GOD(NX,U,P,GAM,DT,DX,UP,F)
-      ! Godunov + HLL Riemann solver
+
       CASE (5)
+        ! Godunov + HLL Riemann solver
         CALL HLL(NX,U,P,GAM,DT,DX,WSPD,UP,F)
-      ! Godunov + HLLC Riemann solver
+
       CASE (6)
+        ! Godunov + HLLC Riemann solver
         CALL HLLC(NX,U,P,GAM,DT,DX,SOLVER,WSPD,AVG,UP,F)
-      ! Godunov + HLLC + Domain reconstruction
+
       CASE (7)
+        ! Godunov + HLLC + Domain reconstruction
         CALL HLLC(NX,U,P,GAM,DT,DX,SOLVER,WSPD,AVG,UP,F)
 
     END SELECT

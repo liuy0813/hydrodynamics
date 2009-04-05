@@ -75,9 +75,9 @@ SUBROUTINE INITCOND(ICS,NX,P,P0,NT)
       NT = 0.012
     ! Custom Riemann test
     CASE (6)
-      X0 = 0.8
-      UL0 = -19.59745
-      UR0 = -19.59745
+      X0 = 0.5
+      UL0 = 0.0
+      UR0 = 0.0
       DL0 = 1.0
       DR0 = 1.0
       PL0 = 1000.0
@@ -752,6 +752,11 @@ SUBROUTINE BOUNDARY(NX, BCS, UP)
     UP(NX,:) = UP(NX-1,:)
     UP(1,2) = -1*UP(2,2)
     UP(NX,2) = -1*UP(NX-1,2)
+
+  CASE (3)
+    ! Periodic boundary condition
+    UP(1,:) = UP(NX-1,:)
+    UP(NX,:) = UP(2,:)
 
   END SELECT
 
