@@ -28,7 +28,7 @@ MODULE PARAMETERS
   !  5: Godunov upwind scheme + HLL Riemann solver
   !  6: Godunov upwind scheme + HLLC Riemann solver
   !  7: Godunov + HLLC with Linear Data Reconstruction
-  INTEGER, PARAMETER :: SOLVER = 6
+  INTEGER, PARAMETER :: SOLVER = 7
 
   ! FOR METHODS 5, 6 and 7 ONLY
   ! WSPD sets the wavespeed estimation method:
@@ -65,6 +65,7 @@ MODULE PARAMETERS
   ! BCS sets boundary conditions type
   !  1: Free-flow (transmission)
   !  2: Reflection
+  !  3: Periodic
   INTEGER, PARAMETER :: BCS = 1
 
   ! Final Integration time

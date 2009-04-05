@@ -7,7 +7,7 @@ COMPILER =gfortran
 FLAGS    =-O3 -Wall
 PGPLOT   =-lX11 -lpgplot
 
-$(PROGRAM):
+$(PROGRAM): $(SOURCES)
 	@echo 'Compiling and linking...'	
 	$(COMPILER) $(SOURCES) -o $(PROGRAM) $(FLAGS) $(PGPLOT)
 	@echo 'Done'
