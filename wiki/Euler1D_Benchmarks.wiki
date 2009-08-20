@@ -1,0 +1,42 @@
+#summary Benchmarks for the Euler1D code in Fortran90, Python and Java
+
+== Euler1D Language Benchmarks ==
+
+The Euler1D code was a good opportunity to test the performance of different programming languages for scientific computing. A small portion of the original Euler1D code was ported first to Python and later to Java. The same problem was solved on all three versions of the code, and the results are presented in this page.
+
+=== Python and Java ports ===
+
+Specifically, the ports are a trimmed-down version of the Euler1D code featuring only one solution algorithm: the Lax-Friedrichs method. Since this method is simple, porting the code to Python and Java was relatively quick (more so for Python than for Java).
+
+You can download the Python port [http://code.google.com/p/hydrodynamics/source/browse/trunk/Euler1D/python/Euler1D.py here].
+
+The Java port has two classes: the Euler1D class, and the Euler1DLauncher class. After compiling to bytecode, the program can be run by executing Euler1DLauncher through the JVM.
+
+=== Benchmark ===
+
+I ran the standard [http://en.wikipedia.org/wiki/Sod_Shock_Tube Sod Shock Tube] test with all three codes, using the Lax-Friedrichs algorithm and the following simulation parameters:
+
+  * Number of grid points: 5000
+  * Final integration time: 0.5
+  * Courant parameter: 0.5
+
+=== Results ===
+
+|| Language   || Compiler/Interpreter || Execution Time || Ratio to fastest ||
+|| Fortran 90 || GCC Fortran compiler 4.3.3 || 6.468s || 1.0 ||
+|| Python     || Python 2.6.2 || ?? || ?? ||
+|| Java       || Sun JRE 1.6.0_14 || ?? || ?? ||
+
+Still in progres... Old wiki follows:
+
+I think these numbers speak for themselves. This definitely makes Python unsuitable for serious hydrodynamic simulations. 
+
+This is mainly due to the fact that Python is an interpreted (as opposed to compiled) language. The difference is that, when a program is run, the Python interpreter has to parse and check each line of code every time it is executed. This small overhead quickly adds up when you have large loops of instructions, which is typical in hydro codes. With compiled languages, all the code is parsed and checked only once.
+
+Another possible reason Python is slower is because several of the higher-level abstract constructs supported in Python (that make coding a pleasure) are probably slower than the lower-level equivalent implementation in Fortran. 
+
+Now, fostering my undiminished love for Python here, I'll say a few things in its defense. First, of course, the comparison I'm making here is very unfair, since Python code is not compiled. It's like comparing a limousine to a sport car - they have different design goals. While there are small 3rd party Python compilers, I don't think they can compete with the GCC compiler: it is heavily optimized, having been improved continuously over decades by a large base of developers.
+
+Second, I'm sure my Python implementation of the Euler1D code could be optimized (I hacked it together in very little time - that's the strong point of Python). For instance, I use the {{{append}}} list method a lot, which is probably slower than having static arrays (i.e. lists). However, I suspect that no matter how much optimization is done on the code, it will never approach Fortran's performance (and I'm sure the C performance would be as good). 
+
+So Python for fun, Fortran/C for work.
