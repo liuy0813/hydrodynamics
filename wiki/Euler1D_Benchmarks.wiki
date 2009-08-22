@@ -25,6 +25,7 @@ I ran the standard [http://en.wikipedia.org/wiki/Sod_Shock_Tube Sod Shock Tube] 
 || *Language*  || *Compiler/Interpreter* || *Options* || *Execution Time* || *Ratio to fastest* ||
 || Fortran90 || GCC Fortran compiler 4.3.3 || -O3 -Wall || 6.634s || 1.0 ||
 || Java      || Sun JRE 1.6.0_14 || -O || 7.280s || 1.097 ||
-|| Python    || Python 2.6.2 || -O || 751.9s || 113.34 ||
+|| Java - no JIT || Sun JRE 1.6.0_14 || -Djava.compiler=NONE || 569.43s || 87.2 ||
+|| Python    || Python 2.6.2 || -O || 751.9s || 113.3 ||
 
-Note: for Fortran90 and Java, the benchmark was run 5 times - shown is the average execution time (for Python there was no point).
+Note: for Fortran90 and Java, the benchmark was run 5 times - shown is the average execution time (for Java without JIT and Python there was no point).
