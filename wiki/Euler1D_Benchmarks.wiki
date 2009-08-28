@@ -12,7 +12,8 @@ You can download the Python port [http://code.google.com/p/hydrodynamics/source/
 
 The Java port is composed of the [http://code.google.com/p/hydrodynamics/source/browse/trunk/benchmarks/Euler1D.java Euler1D.java] class; it must be launched as main.Euler1D since it's part of the main package.
 
-The C++ port can be obtained [http://code.google.com/p/hydrodynamics/source/browse/trunk/benchmarks/Euler1D.c++ here].
+The C++ port can be obtained [http://code.google.com/p/hydrodynamics/source/browse/trunk/benchmarks/Euler1D.c%2B%2B here].
+
 
 === Benchmark ===
 
