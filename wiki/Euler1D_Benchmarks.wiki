@@ -2,15 +2,17 @@
 
 == Euler1D Language Benchmarks ==
 
-The Euler1D code was a good opportunity to test the performance of different programming languages for scientific computing. A small portion of the original Euler1D code was ported first to Python and later to Java. The same problem was solved on all three versions of the code, and the results are presented in this page.
+The Euler1D code was a good opportunity to test the performance of different programming languages for scientific computing. A small portion of the original Euler1D code was ported first to Python and later to Java and C++. The same problem was solved on all versions of the code, with the results checked for consistency. The results are presented in this page.
 
-=== Python and Java ports ===
+=== C++, Java and Python ports ===
 
-Specifically, the ports are a trimmed-down version of the Euler1D code featuring only one solution algorithm: the Lax-Friedrichs method. Since this method is simple, porting the code to Python and Java was relatively quick (more so for Python than for Java).
+Specifically, the ports are a trimmed-down version of the Euler1D code featuring only one solution algorithm: the Lax-Friedrichs method. Since this method is simple, porting the code was relatively quick (more so for Python than for Java or C++).
 
-You can download the Python port [http://code.google.com/p/hydrodynamics/source/browse/trunk/Euler1D/python/Euler1D.py here].
+You can download the Python port [http://code.google.com/p/hydrodynamics/source/browse/trunk/benchmarks/Euler1D.py here].
 
-The Java port is composed of the Euler1D.java class; it must be launched as main.Euler1D since it's part of the main package.
+The Java port is composed of the [http://code.google.com/p/hydrodynamics/source/browse/trunk/benchmarks/Euler1D.java Euler1D.java] class; it must be launched as main.Euler1D since it's part of the main package.
+
+The C++ port can be obtained [http://code.google.com/p/hydrodynamics/source/browse/trunk/benchmarks/Euler1D.c++ here].
 
 === Benchmark ===
 
@@ -22,10 +24,16 @@ I ran the standard [http://en.wikipedia.org/wiki/Sod_Shock_Tube Sod Shock Tube] 
 
 === Results ===
 
+The following table summarises the various runs, sorted by increasing execution time.
+
 || *Language*  || *Compiler/Interpreter* || *Options* || *Execution Time* || *Ratio to fastest* ||
-|| Fortran90 || GCC Fortran compiler 4.3.3 || -O3 -Wall || 6.634s || 1.0 ||
+|| Fortran90 || GCC Fortran compiler 4.3.3 || -O3 || 6.634s || 1.0 ||
+|| C++       || GCC C++ compiler 4.3.3 || -O3 || 6.841s || 1.031 ||
 || Java      || Sun JRE 1.6.0_14 || -O || 7.280s || 1.097 ||
+|| C++       || GCC C++ compiler 4.3.3 || None || 10.606 || 1.5987 ||
 || Java - no JIT || Sun JRE 1.6.0_14 || -Djava.compiler=NONE || 569.43s || 87.2 ||
 || Python    || Python 2.6.2 || -O || 751.9s || 113.3 ||
 
-Note: for Fortran90 and Java, the benchmark was run 5 times - shown is the average execution time (for Java without JIT and Python there was no point).
+Note: for Fortran90, C++ and Java, the execution time shown is the average of 5 consecutive runs (for Java without JIT and Python there was no point).
+
+=== Discussion ===
