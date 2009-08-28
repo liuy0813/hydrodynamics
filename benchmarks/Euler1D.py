@@ -1,30 +1,24 @@
-#####################################
-#            Euler1D.py             #
-#                                   #
-#           19 Feb 2009             #
-#        by J.C. Toledo-Roy         #
-#####################################
-# Python port of the Euler 1D code, #
-# implementing the Lax-Friedrichs   #
-# solver. It was done to compare    #
-# performance with the Fortran 90   # 
-# version.                          #
-#                                   #
-# The Sod Shock Tube was run with   #
-# both codes, with NT=5.0, CP=0.5,  #
-# and NX=1000. The final output of  #
-# both codes was checked to ensure  #
-# they produced the same result.    #
-# The execution times were:         #
-#                                   #
-# Python code: 235.72s              #
-# Fortran90 code: 2.315s            #
-#                                   #
-# As seen, there is a monumental    #
-# 100X difference in performance,   #  
-# making Python unsuitable for      #
-# serious HD work.                  #
-#####################################
+##############################################################
+#                        Euler1D.py                          #
+#                                                            #
+#                       19 Feb 2009                          #
+#                    by J.C. Toledo-Roy                      #
+##############################################################
+# Python port of part of the Euler 1D code, implementing the #
+# Lax-Friedrichs solver. It was done to compare performance  #
+# with the Fortran 90 version.                               #
+#                                                            #
+# The Sod Shock Tube was run with both codes, with NT=0.5,   #
+# CP=0.5, and NX=5000. The final output of both codes was    #
+# checked to ensure they produced the same result. The       #
+# execution times were:                                      #
+#                                                            #
+# Python code: 734.75s                                       #
+# Fortran90 code: 6.468s                                     #
+#                                                            #
+# As seen, there is a monumental 100X difference in          #
+# performance making Python unsuitable for serious HD work.  #
+##############################################################
 
 from __future__ import division
 from math import sqrt
@@ -35,13 +29,14 @@ from string import zfill
 # Global Declarations #
 #######################
 
-# Define Simulation Parameter
-NX = 1000       # Number of grid points
+# Define Simulation Parameters
+NX = 5000       # Number of grid points
 L = 1.0         # Grid physical length
-NT = 5.0        # Final integration time
+NT = 0.5        # Final integration time
 CP = 0.5        # Courant Parameter
 GAM = 1.4       # Heat capacity ratios
 NOUT = 20       # Number of outputs
+BENCH = 1       # Benchmark mode?
 
 # Output Filename Template
 # Iteration number will be placed between root and extension
@@ -53,7 +48,7 @@ ROOT = 'Sod.'
 EXT = '.dat'
 
 # Declare Simulation Variables
-# These are double lists, structured as follows:
+# These are lists of lists, structured as follows:
 #  U[X][0] = x       P[X][0] = x     F[X][0] = x
 #  U[X][1] = rho     P[X][1] = u     F[X][1] = rho*u
 #  U[X][2] = rho*u   P[X][2] = rho   F[X][2] = rho*u^2+P
@@ -63,7 +58,7 @@ U = []     # Integration variables
 UP = []    # Stepped integration variables
 P = []     # Primitives
 F = []     # Fluxes
-# and initialize them ...
+# ... and initialize them
 for X in range(NX):
   U.append([X,0,0,0])
   UP.append([X,0,0,0])
@@ -90,16 +85,16 @@ def initcond():
    # This is a standard test for hydro codes
    # Velocity = 0 everywhere
    # Density = 1.0 on left half, 0.125 on right half
-   # Pressure = 1.0 on left, 0.125 on right
+   # Pressure = 1.0 on left, 0.1 on right
   for X in range(NX):
-    if (X<=NX/2):
+    if (X+1<=NX/2):
       P[X][1] = 0.0
       P[X][2] = 1.0
       P[X][3] = 1.0
     else:
       P[X][1] = 0.0
       P[X][2] = 0.125
-      P[X][3] = 0.125
+      P[X][3] = 0.1
   getvars()
 
 #############################
@@ -135,7 +130,7 @@ def getstep():
   UMAX = 0
   ULOC = 0
   for x in range(NX):
-    ULOC = P[x][1] + sqrt(GAM*P[x][3]/P[x][2])
+    ULOC = abs(P[x][1]) + sqrt(GAM*P[x][3]/P[x][2])
     if (ULOC > UMAX):
       UMAX = ULOC
   return DX/UMAX * CP
@@ -213,25 +208,18 @@ def output():
 
   # Close file
   file.close()
-  NDUMP = NDUMP + 1
 
 ##########################
 # Reports progress and   #
 # dumps output if needed #
 ##########################
 def progress():
+  global NDUMP
 
-  #print 'IT=' + str(IT) \
-        #+ ', T=' + str(T) \
-        #+ ' (' + str(T/NT*100) + '%)' \
-        #+ ', DT=' + str(DT)
-
-  if (T/NT > NDUMP/NOUT): output()
-
-# DEBUG FUNCTION
-def nprint(list):
-  for element in list:
-    print element
+  if (T/NT > NDUMP/NOUT):
+    print 'Progress: %6.3f%% (IT=%5.5i)' %  (T/NT*100, IT)
+    if (BENCH!=1): output()
+    NDUMP = NDUMP + 1
 
 # Benchmarking function
 def bench(secs):
@@ -243,9 +231,10 @@ def bench(secs):
 
 # Initialize
 initcond()
-output()
+if (BENCH!=1): output()
 
 # Timer
+if (BENCH==1): print 'Starting simulation in benchmark mode ...'
 start = clock()
 
 # Main Loop
