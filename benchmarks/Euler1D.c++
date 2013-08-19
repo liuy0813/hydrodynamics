@@ -5,8 +5,9 @@
  *      Author: meithan
  */
 
-#import <math.h>
-#import <string>
+#include <stdio.h>
+#include <math.h>
+#include <string>
 
 // GLOBAL VARIABLES (EVIL)
 
